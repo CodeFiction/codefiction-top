@@ -18,7 +18,8 @@
     </div>
 
 	<ul class="c-card c-card--highest u-high">
-		<li *ngFor="let topper of topperList.getList()"  [style.background-color]="topper.color" class="c-card__item topper"><h3 >{{topper.name}}</h3></li>
+        <div class="c-card__item c-card__item--divider">#{{currentTopper.room}}</div>
+        <li *ngFor="let topper of topperList.getList()"  [style.background-color]="topper.color" class="c-card__item topper"><h3 >{{topper.name === currentTopper.name ? '@'+topper.name : topper.name }}</h3></li>
 	</ul>
 
     <button (click)="onTopMe()" class="c-button c-button--rounded c-button--ghost-error c-button--block u-super u-highest">Speak up! <i class="fa fa-bullhorn" aria-hidden="true"></i>

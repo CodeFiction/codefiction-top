@@ -7,7 +7,7 @@ RUN mkdir $HOME
 
 WORKDIR $HOME
 RUN apk add --no-cache make gcc g++ python
-RUN npm install -g angular-cli
+RUN npm install -g angular-cli@latest
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

@@ -8,6 +8,12 @@ export namespace Datastructure {
         id: string;
         name: string;
         color: string;
+        room: string;
+    }
+
+
+    export interface IStackMap {
+        [index: string]: Datastructure.TopperStack;
     }
 
     export class TopperStack {

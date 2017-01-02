@@ -14,6 +14,8 @@ import {Router} from "@angular/router";
     <div class="o-grid">
         <div class="o-grid__cell o-grid__cell--width-60">
               <input type="text" name="userName" id="name" placeholder="e.g: Nickname" [class.c-field--error]="usernameInvalid" [(ngModel)]="currentTopper.name" class="c-field">
+              <br />     
+                  <input type="text" name="roomName" id="name" placeholder="Room to join" [(ngModel)]="currentTopper.room" class="c-field">
               <br />
               <span>Current online toppers: {{ onlineCount }}</span>
         </div>
@@ -48,8 +50,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
 
-      this.userInfoService.getSocketConnection().on('update_toppers', (data) => {
-          this.onlineCount = data.toppers.length;
+      this.userInfoService.getSocketConnection().on('update_toppers', (totalTopppers) => {
+            this.onlineCount = totalTopppers;
       });
 
       this.userInfoService.getSocketConnection().on('update_me', (data) => {

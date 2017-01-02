@@ -11,7 +11,7 @@ export class UserInfoService {
 
     private socket;
 
-    currentTopper: Datastructure.ITopper = {id: null, name: null, color: UserInfoService.generateHex()};
+    currentTopper: Datastructure.ITopper = {id: null, name: null, color: UserInfoService.generateHex(), room: null};
 
     constructor() {
         this.socket = io(socket_io_address);
