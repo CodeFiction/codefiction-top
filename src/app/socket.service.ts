@@ -1,5 +1,5 @@
-import {Datastructure} from "../../Datastructure/TopperStack";
-import {Injectable} from "@angular/core";
+import { Datastructure } from '../../Datastructure/TopperStack';
+import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 
 /**
@@ -7,25 +7,35 @@ import * as io from 'socket.io-client';
  */
 @Injectable()
 export class SocketService {
+  private socket;
 
-    private socket;
+  currentTopper: Datastructure.ITopper = {
+    id: null,
+    name: null,
+    color: SocketService.generateHex(),
+    room: null,
+  };
 
-    currentTopper: Datastructure.ITopper = {id: null, name: null, color: SocketService.generateHex(), room: null};
+  constructor() {
+    //Connects the current host
+    this.socket = io();
+  }
 
-    constructor() {
-        //Connects the current host
-        this.socket = io();
-    }
+  getCurrentTopper(): Datastructure.ITopper {
+    return this.currentTopper;
+  }
 
-    getCurrentTopper() : Datastructure.ITopper {
-        return this.currentTopper
-    }
+  getSocketConnection() {
+    return this.socket;
+  }
 
-    getSocketConnection() {
-        return this.socket;
-    }
-
-    static generateHex() : string {
-        return '#' + Math.random().toString(16).slice(2, 8).toUpperCase();
-    }
+  static generateHex(): string {
+    return (
+      '#' +
+      Math.random()
+        .toString(16)
+        .slice(2, 8)
+        .toUpperCase()
+    );
+  }
 }

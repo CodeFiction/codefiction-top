@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Datastructure } from '../../../Datastructure/TopperStack';
-import {SocketService} from "../socket.service";
-import {Router} from "@angular/router";
+import { SocketService } from '../socket.service';
+import { Router } from '@angular/router';
 
 @Component({
-    template: `<div class="o-container o-container--large">
+  template: `<div class="o-container o-container--large">
 
     <div class="u-center-block" style="height: 20px;">
     </div>
@@ -46,34 +46,29 @@ import {Router} from "@angular/router";
         </div>
     </div>
     <router-outlet></router-outlet>`,
-    styles: ['#topperList { padding:0px; margin-top:0px; }']
+  styles: ['#topperList { padding:0px; margin-top:0px; }'],
 })
 export class TopMainComponent implements OnInit {
+  socketService: SocketService;
+  currentTopper: Datastructure.ITopper;
+  topperList: Datastructure.TopperStack = new Datastructure.TopperStack([]);
+  socket;
 
-    socketService: SocketService;
-    currentTopper: Datastructure.ITopper;
-    topperList: Datastructure.TopperStack = new Datastructure.TopperStack([]);
-    socket;
-
-
-    constructor(socketService: SocketService, private router: Router){
-        this.socketService = socketService;
-        this.currentTopper = this.socketService.getCurrentTopper();
-        if(this.currentTopper.name === null) {
-            this.router.navigate(['/register'], {});
-        }
+  constructor(socketService: SocketService, private router: Router) {
+    this.socketService = socketService;
+    this.currentTopper = this.socketService.getCurrentTopper();
+    if (this.currentTopper.name === null) {
+      this.router.navigate(['/register'], {});
     }
+  }
 
-    ngOnInit() {
+  ngOnInit() {
+    this.socketService.getSocketConnection().on('update_toppers', data => {
+      this.topperList.setList(data.toppers);
+    });
+  }
 
-        this.socketService.getSocketConnection().on('update_toppers', (data) => {
-            this.topperList.setList(data.toppers);
-        });
-
-    }
-
-    topMe() {
-        this.socketService.getSocketConnection().emit('top_me', this.currentTopper);
-    }
-
+  topMe() {
+    this.socketService.getSocketConnection().emit('top_me', this.currentTopper);
+  }
 }
