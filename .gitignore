@@ -85,3 +85,9 @@ server/ts-node
 .config
 .ash_history
 # End of https://www.gitignore.io/api/node
+/.ash_history
+/.editorconfig
+/.config/
+/.npm/
+/.v8flags.5.4.500.45.undefined.json
+/ts-node/

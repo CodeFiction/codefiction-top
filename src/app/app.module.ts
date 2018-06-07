@@ -5,24 +5,21 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { TopMainComponent } from './top-main/top-main.component';
-import {routing} from "./app.route";
+import { routing } from './app.route';
 import * as io from 'socket.io-client';
-import { UserInfoService } from './userinfo.service';
-import { RegisterComponent } from './register/register.component'
+import { SocketService } from './socket.service';
+import { RegisterComponent } from './register/register.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopMainComponent,
-    RegisterComponent
+    RegisterComponent,
+    ChatComponent,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    routing
-  ],
-  providers: [UserInfoService],
-  bootstrap: [AppComponent]
+  imports: [BrowserModule, FormsModule, HttpModule, routing],
+  providers: [SocketService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

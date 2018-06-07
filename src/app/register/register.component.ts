@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {UserInfoService} from "../userinfo.service";
-import {Datastructure} from "../../../Datastructure/TopperStack";
-import {Router} from "@angular/router";
+import { SocketService } from '../socket.service';
+import { Datastructure } from '../../../Datastructure/TopperStack';
+import { Router } from '@angular/router';
 
 @Component({
   template: `<div class="o-container o-container--small">
-
     <div class="u-center-block" style="height: 20px;">
     </div>
 
@@ -23,47 +22,42 @@ import {Router} from "@angular/router";
                 <button (click)="addUser()" class="c-button c-button--info">Start topping <i class="fa fa-play" aria-hidden="true"></i></button>
         </div>
     </div>
-    
-    
     </form>
     </div>
-<router-outlet></router-outlet>`
+<router-outlet></router-outlet>`,
 })
-
 export class RegisterComponent implements OnInit {
+  currentTopper: Datastructure.ITopper;
+  usernameInvalid: boolean = false;
+  onlineCount: number = 0;
 
-    currentTopper: Datastructure.ITopper;
-    usernameInvalid: boolean = false;
-    onlineCount: number = 0;
-
-
-    constructor(private userInfoService: UserInfoService, private router: Router){
-        this.router = router;
-        this.userInfoService = userInfoService;
-        this.currentTopper = this.userInfoService.getCurrentTopper();
-
-    }
-
-    addUser() {
-        this.userInfoService.getSocketConnection().emit('addUser', this.currentTopper);
-    }
-
-  ngOnInit() {
-
-      this.userInfoService.getSocketConnection().on('update_toppers', (totalTopppers) => {
-            this.onlineCount = totalTopppers;
-      });
-
-      this.userInfoService.getSocketConnection().on('update_me', (data) => {
-          this.currentTopper.id = data.id;
-          this.router.navigate(['/topper'], {});
-      });
-
-      this.userInfoService.getSocketConnection().on('register_failed', (data) => {
-          this.currentTopper.id = data.id;
-          this.usernameInvalid = true;
-      });
-
+  constructor(private socketService: SocketService, private router: Router) {
+    this.router = router;
+    this.socketService = socketService;
+    this.currentTopper = this.socketService.getCurrentTopper();
   }
 
+  addUser() {
+    this.socketService
+      .getSocketConnection()
+      .emit('addUser', this.currentTopper);
+  }
+
+  ngOnInit() {
+    this.socketService
+      .getSocketConnection()
+      .on('update_toppers', totalTopppers => {
+        this.onlineCount = totalTopppers;
+      });
+
+    this.socketService.getSocketConnection().on('update_me', data => {
+      this.currentTopper.id = data.id;
+      this.router.navigate(['/topper'], {});
+    });
+
+    this.socketService.getSocketConnection().on('register_failed', data => {
+      this.currentTopper.id = data.id;
+      this.usernameInvalid = true;
+    });
+  }
 }
