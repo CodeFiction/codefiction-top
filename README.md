@@ -18,3 +18,6 @@ This will install dependencies and run client & server. Then browse to `http://l
 - Dependency clean up
 
 Feel free to contribute!
+
+Run this one to keep the app running on heroku for free:
+`while true; do curl https://codefiction-top.herokuapp.com/topper\;sleep 1000; done;`
