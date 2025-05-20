@@ -3,7 +3,8 @@ import {
   AfterViewChecked,
   ElementRef,
   ViewChild,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 
 import { SocketService } from '../socket.service';
@@ -29,7 +30,7 @@ import { Chat } from '../../../Datastructure/Message';
     'b { color: #2e69c9; }'
   ]
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('chatwindow') private myScrollContainer: ElementRef;
 
   private previousChatHeight: number = 0;
@@ -50,6 +51,10 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.socketService.getSocketConnection().on('message', data => {
       this.messages.push(data);
     });
+  }
+
+  ngOnDestroy() {
+    this.socketService.getSocketConnection().off('message');
   }
 
   sendMessage(event) {
