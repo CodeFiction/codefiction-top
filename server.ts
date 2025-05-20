@@ -44,6 +44,9 @@ io.on('connection', function(client) {
       client.emit('update_me', data);
       io.in(data.room).emit('update_toppers', currentStack);
       totalToppers++;
+      // store topper info for disconnect event
+      client.topper = data;
+      io.emit('update_toppers', totalToppers);
     } else {
       client.emit('register_failed', data);
     }
@@ -62,11 +65,14 @@ io.on('connection', function(client) {
     }
   });
 
-  // Todo: How to handle disconnection
-  // client.on('disconnect', function(data: Datastructure.ITopper){
-  //     console.log("disconnected");
-  //     console.log(data);
-  //     topperStack.remove(data);
-  //     io.emit('update_toppers', topperStack);
-  // });
+  client.on('disconnect', function() {
+    let data: Datastructure.ITopper = client.topper;
+    if (data) {
+      let currentStack = FindAddStack(data.room, topperStack);
+      currentStack.remove(data);
+      totalToppers--;
+      io.in(data.room).emit('update_toppers', currentStack);
+      io.emit('update_toppers', totalToppers);
+    }
+  });
 });
