@@ -46,8 +46,12 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.socketService
       .getSocketConnection()
-      .on('update_toppers', totalTopppers => {
-        this.onlineCount = totalTopppers;
+      .on('update_toppers', data => {
+        if (typeof data === 'number') {
+          this.onlineCount = data;
+        } else if (data && data.toppers) {
+          this.onlineCount = data.toppers.length;
+        }
       });
 
     this.socketService.getSocketConnection().on('update_me', data => {
