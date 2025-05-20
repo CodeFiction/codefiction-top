@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SocketService } from '../socket.service';
 import { Datastructure } from '../../../Datastructure/TopperStack';
 import { Router } from '@angular/router';
@@ -26,7 +26,7 @@ import { Router } from '@angular/router';
     </div>
 <router-outlet></router-outlet>`,
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   currentTopper: Datastructure.ITopper;
   usernameInvalid: boolean = false;
   onlineCount: number = 0;
@@ -38,17 +38,21 @@ export class RegisterComponent implements OnInit {
   }
 
   addUser() {
+    if (!this.currentTopper.name) {
+      this.usernameInvalid = true;
+      return;
+    }
     this.socketService
       .getSocketConnection()
       .emit('addUser', this.currentTopper);
   }
 
   ngOnInit() {
-    this.socketService
-      .getSocketConnection()
-      .on('update_toppers', totalTopppers => {
-        this.onlineCount = totalTopppers;
-      });
+      this.socketService
+        .getSocketConnection()
+        .on('total_toppers', total => {
+          this.onlineCount = total;
+        });
 
     this.socketService.getSocketConnection().on('update_me', data => {
       this.currentTopper.id = data.id;
@@ -59,5 +63,12 @@ export class RegisterComponent implements OnInit {
       this.currentTopper.id = data.id;
       this.usernameInvalid = true;
     });
+  }
+
+  ngOnDestroy() {
+    const socket = this.socketService.getSocketConnection();
+    socket.off('total_toppers');
+    socket.off('update_me');
+    socket.off('register_failed');
   }
 }

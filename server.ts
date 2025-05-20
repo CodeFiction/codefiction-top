@@ -31,8 +31,8 @@ function FindAddStack(room: string, currentStack): Datastructure.TopperStack {
 }
 
 io.on('connection', function(client) {
-  // Send current user list to current user only
-  client.emit('update_toppers', totalToppers);
+  // Send current user count to the connecting client only
+  client.emit('total_toppers', totalToppers);
 
   client.on('addUser', function(data: Datastructure.ITopper) {
     data.id = client.id;
