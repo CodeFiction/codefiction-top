@@ -46,8 +46,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.socketService
       .getSocketConnection()
-      .on('update_toppers', totalTopppers => {
-        this.onlineCount = totalTopppers;
+      .on('update_toppers', totalToppers => {
+        this.onlineCount = totalToppers;
       });
 
     this.socketService.getSocketConnection().on('update_me', data => {
