@@ -1,6 +1,6 @@
 # [Codefiction](https://github.com/CodeFiction) Top Application
 
-A simple web app that helps to maintain speaking order while recording podcasts online with multiple speakers. Made with Angular 2 & Socket.io for experimental purposes.
+A simple web app that helps to maintain speaking order while recording podcasts online with multiple speakers. Made with Angular 4 & Socket.io for experimental purposes.
 
 To start the app run;
 
